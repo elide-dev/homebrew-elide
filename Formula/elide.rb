@@ -29,7 +29,7 @@ class Elide < Formula
   end
   
   def install
-    bin.install "bin/elide"
+    bin.install "elide"
     # Install docs if they exist
     doc.install Dir["docs/*"] if Dir.exist?("docs")
     # Install man pages if they exist
