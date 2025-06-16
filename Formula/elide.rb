@@ -24,7 +24,7 @@ class Elide < Formula
     end
     on_intel do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide-#{version}-linux-amd64.tgz"
-      sha256 "69d29995a5b13387677bafd4aea22e29f0e14ed0d3de7eaa46e23983fdb90a08"
+      sha256 "4600633661497a050270e35428e3d5bcc8ed48ed27e0197def683f38b63b600c"
     end
   end
   
