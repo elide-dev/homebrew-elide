@@ -6,7 +6,7 @@ class Elide < Formula
   
   on_macos do
     on_arm do
-      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide-#{version}-darwin-aarch64.txz"
+      url "https://elide.zip/cli/v1/snapshot/darwin-aarch64/#{version}/elide.txz"
       sha256 "130e0efcb6f253eac9527dac150d47b34b9c0be7c4f43660fe79f33d007cbc85"
     end
     on_intel do
@@ -18,11 +18,11 @@ class Elide < Formula
   
   on_linux do
     on_arm do
-      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide-#{version}-linux-aarch64.tgz"
+      url "https://elide.zip/cli/v1/snapshot/linux-aarch64/#{version}/elide.tgz"
       sha256 "e43beb097b06ffbcada13f595cda532c2e81ae5b8001785253d9926729392b50"
     end
     on_intel do
-      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide-#{version}-linux-amd64.tgz"
+      url "https://elide.zip/cli/v1/snapshot/linux-amd64/#{version}/elide.tgz"
       sha256 "2cbd9d45f5904390b303a1963379cc3e68591cf09aa875bff260cf1fb45bfe38"
     end
   end
