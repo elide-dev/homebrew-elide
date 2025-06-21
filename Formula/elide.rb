@@ -28,12 +28,11 @@ class Elide < Formula
   end
   
   def install
-    bin.install "elide"
-    bin.install Dir["resources"]
-    # Install docs if they exist
-    doc.install Dir["docs/*"] if Dir.exist?("docs")
-    # Install man pages if they exist
-    man1.install Dir["man/*.1"] if Dir.exist?("man")
+    libexec.install "elide"
+    libexec.install Dir["resources"]
+    Dir.glob("#{libexec}/elide").select { |f| File.executable?(f) }.each do |exe|
+      bin.install_symlink exe => File.basename(exe)
+    end
   end
   
   test do
