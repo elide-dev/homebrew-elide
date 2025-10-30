@@ -1,13 +1,13 @@
 class Elide < Formula
   desc "Fast polyglot runtime for JavaScript, TypeScript, and Python"
   homepage "https://elide.dev"
-  version "1.0.0-beta9"
+  version "1.0.0-beta10"
   license "MIT"
   
   on_macos do
     on_arm do
       url "https://elide.zip/cli/v1/snapshot/darwin-aarch64/#{version}/elide.txz"
-      sha256 "47d4ca73f211cc5e70e0a8b857a02c5bb4192633f96927509a8b4901ffee997c"
+      sha256 "011dfe9bbb6aafba25b7e0d4e3fdb7cd8df5619fe4cc7777e247f252d2d24949"
     end
     on_intel do
       # macOS Intel not available in this version
@@ -18,11 +18,11 @@ class Elide < Formula
   on_linux do
     on_arm do
       url "https://elide.zip/cli/v1/snapshot/linux-aarch64/#{version}/elide.tgz"
-      sha256 "34c3aed8a9d3ac243ea62100c8ee1e17ce2d6e218f578626916feb7feb9b84ef"
+      sha256 "e6489c93c53dfe3a12360fb09a7946bf4d56d8046b91e6f5075093030976e00c"
     end
     on_intel do
       url "https://elide.zip/cli/v1/snapshot/linux-amd64/#{version}/elide.tgz"
-      sha256 "26eb0e66d08d97911db9d021051f87a448015a48ddfebc36e7f76f6a02af263c"
+      sha256 "8d5e563b3910d9475d2fff8fcf8e287a41524ef3c9766bd645f972b6ef10a743"
     end
   end
   
