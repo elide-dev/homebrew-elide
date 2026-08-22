@@ -1,5 +1,5 @@
 class Elide < Formula
-  desc "Fast polyglot runtime, compiler and toolchain for JVM, JavaScript, TypeScript and Python"
+  desc "Fast runtime, compiler and toolchain for JVM, JavaScript and Python"
   homepage "https://elide.dev"
   version "1.4.4+20260822"
   license :cannot_represent
@@ -14,8 +14,10 @@ class Elide < Formula
     # Only Apple Silicon archives are published upstream.
     depends_on arch: :arm64
 
-    url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.macos-arm64.txz"
-    sha256 "b328fc12985a43a90b059ff5de3f060f23d1caf6e5fa7e7f9d73b1291d2effe4"
+    on_arm do
+      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.macos-arm64.txz"
+      sha256 "b328fc12985a43a90b059ff5de3f060f23d1caf6e5fa7e7f9d73b1291d2effe4"
+    end
   end
 
   on_linux do
