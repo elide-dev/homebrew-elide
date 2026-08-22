@@ -7,7 +7,7 @@ class Elide < Formula
   livecheck do
     url :stable
     strategy :github_latest
-    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+\+\d+)}i)
+    regex(/^v?(\d+(?:\.\d+)+(?:\+\d+)?)$/i)
   end
 
   on_macos do
