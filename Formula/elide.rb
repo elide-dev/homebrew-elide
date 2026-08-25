@@ -6,17 +6,22 @@ class Elide < Formula
 
   livecheck do
     url :stable
-    strategy :github_latest
+    # `:github_releases` scans recent releases; `:github_latest` would read only
+    # the single `/releases/latest` record. That matters because upstream
+    # publishes nightlies non-prerelease with `--latest` on purpose (so
+    # setup-elide's `releases/latest` resolves to them), so "latest" alternates
+    # between channels — and the moment it points at a stable release, a
+    # nightly-only regex matches nothing and livecheck exits non-zero even
+    # though a perfectly good nightly exists. Scanning lets the regex select the
+    # newest tag this formula can actually resolve.
+    strategy :github_releases
     # Deliberately matches ONLY `<semver>+<datestamp>` nightly tags. The `url`
     # below interpolates `#{version}` straight into the download path, so the
     # only version this formula can resolve is one where the release tag and
     # the version are the same string — true for nightly, false for a stable
     # release (tag `v1.5.0`, version `1.5.0`) and for preview
     # (`preview-20260824`). A looser `^v?…(\+\d+)?$` reports `1.5.0` off the
-    # first stable release, which 404s for anyone who acts on it. Nightlies
-    # are published non-prerelease with `--latest` on purpose (so setup-elide's
-    # `releases/latest` resolves to them), which means `:github_latest`
-    # alternates between channels whose tag→version mappings differ.
+    # first stable release, which 404s for anyone who acts on it.
     # The `i` flag is required by `brew style`
     # (FormulaAudit/LivecheckRegexCaseInsensitive) even though the pattern has
     # no letters to fold.
