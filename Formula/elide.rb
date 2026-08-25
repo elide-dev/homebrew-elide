@@ -1,41 +1,45 @@
 class Elide < Formula
-  desc "Fast polyglot runtime for JavaScript, TypeScript, and Python"
+  desc "Fast runtime, compiler and toolchain for JVM, JavaScript and Python"
   homepage "https://elide.dev"
-  version "1.0.0-beta10"
-  license "MIT"
-  
+  version "1.4.4+20260822"
+  license :cannot_represent
+
+  livecheck do
+    url :stable
+    strategy :github_latest
+    regex(/^v?(\d+(?:\.\d+)+(?:\+\d+)?)$/i)
+  end
+
   on_macos do
+    # Only Apple Silicon archives are published upstream.
+    depends_on arch: :arm64
+
     on_arm do
-      url "https://elide.zip/cli/v1/snapshot/darwin-aarch64/#{version}/elide.txz"
-      sha256 "011dfe9bbb6aafba25b7e0d4e3fdb7cd8df5619fe4cc7777e247f252d2d24949"
-    end
-    on_intel do
-      # macOS Intel not available in this version
-      raise "Elide #{version} does not support macOS Intel. Only ARM64 (Apple Silicon) is supported."
+      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.macos-arm64.txz"
+      sha256 "b328fc12985a43a90b059ff5de3f060f23d1caf6e5fa7e7f9d73b1291d2effe4"
     end
   end
-  
+
   on_linux do
     on_arm do
-      url "https://elide.zip/cli/v1/snapshot/linux-aarch64/#{version}/elide.tgz"
-      sha256 "e6489c93c53dfe3a12360fb09a7946bf4d56d8046b91e6f5075093030976e00c"
+      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.linux-arm64.txz"
+      sha256 "c59cb55e5143fa4837eb1bfc2494961263bb2577a66457ab7cacb886ec2f8f89"
     end
     on_intel do
-      url "https://elide.zip/cli/v1/snapshot/linux-amd64/#{version}/elide.tgz"
-      sha256 "8d5e563b3910d9475d2fff8fcf8e287a41524ef3c9766bd645f972b6ef10a743"
+      url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.linux-amd64.txz"
+      sha256 "5c2f9eb5ad7dad91c65313f529dda8d8bf60d969914d1523577abebb31ea2824"
     end
   end
-  
+
   def install
-    libexec.install "elide"
-    libexec.install Dir["resources"]
-    Dir.glob("#{libexec}/elide").select { |f| File.executable?(f) }.each do |exe|
-      bin.install_symlink exe => File.basename(exe)
-    end
+    # A ~600MB debug build of the same binary; not needed to run Elide.
+    rm "bin/elide.debug" if File.exist?("bin/elide.debug")
+
+    libexec.install Dir["*"]
+    bin.install_symlink libexec/"bin/elide"
   end
-  
+
   test do
-    # Add a test to verify installation
     assert_match version.to_s, shell_output("#{bin}/elide --version")
   end
 end
