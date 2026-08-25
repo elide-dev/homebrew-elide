@@ -21,8 +21,13 @@ permissions: {}
 
 concurrency:
   group: ci-${{ github.ref }}
-  # Superseded PR pushes are worth cancelling; a run against main is gating the
-  # nightly formula bump elidebot pushes, so let those finish.
+  # Superseded PR pushes are worth cancelling. A run against main is NOT a gate
+  # — elidebot commits the nightly bump straight to main via the Contents API,
+  # so by the time this goes red `brew install elide` is already serving the new
+  # formula and nothing consumes the result. It is a postmortem signal, and a
+  # cancelled run is no signal at all, so those are left to finish. Making the
+  # install matrix an actual precondition means having the publisher open a PR
+  # and auto-merge it instead of committing to main.
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 defaults:

@@ -7,7 +7,20 @@ class Elide < Formula
   livecheck do
     url :stable
     strategy :github_latest
-    regex(/^v?(\d+(?:\.\d+)+(?:\+\d+)?)$/i)
+    # Deliberately matches ONLY `<semver>+<datestamp>` nightly tags. The `url`
+    # below interpolates `#{version}` straight into the download path, so the
+    # only version this formula can resolve is one where the release tag and
+    # the version are the same string — true for nightly, false for a stable
+    # release (tag `v1.5.0`, version `1.5.0`) and for preview
+    # (`preview-20260824`). A looser `^v?…(\+\d+)?$` reports `1.5.0` off the
+    # first stable release, which 404s for anyone who acts on it. Nightlies
+    # are published non-prerelease with `--latest` on purpose (so setup-elide's
+    # `releases/latest` resolves to them), which means `:github_latest`
+    # alternates between channels whose tag→version mappings differ.
+    # The `i` flag is required by `brew style`
+    # (FormulaAudit/LivecheckRegexCaseInsensitive) even though the pattern has
+    # no letters to fold.
+    regex(/^(\d+(?:\.\d+)+\+\d+)$/i)
   end
 
   on_macos do
