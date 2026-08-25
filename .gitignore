@@ -1,0 +1,4 @@
+# JetBrains IDEs. The module file currently lands in `.idea/`, but older
+# versions drop it at the repo root — ignore both locations.
+.idea/
+*.iml

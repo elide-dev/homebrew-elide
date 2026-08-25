@@ -6,8 +6,10 @@ class Elide < Formula
 
   livecheck do
     url :stable
-    strategy :github_latest
-    regex(/^v?(\d+(?:\.\d+)+(?:\+\d+)?)$/i)
+    strategy :github_releases
+    # Deliberately matches only `<semver>+<datestamp>` nightly tags. Revisit once
+    # we have stable releases.
+    regex(/^(\d+(?:\.\d+)+\+\d+)$/i)
   end
 
   on_macos do

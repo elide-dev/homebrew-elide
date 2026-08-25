@@ -1,0 +1,114 @@
+name: CI
+
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Superseded PR pushes are worth cancelling. A run against main is NOT a gate
+  # — elidebot commits the nightly bump straight to main via the Contents API,
+  # so by the time this goes red `brew install elide` is already serving the new
+  # formula and nothing consumes the result.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash -xeuo pipefail {0}
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # No actions/checkout: because this repo is named `homebrew-*`,
+      # setup-homebrew clones it into Homebrew's Taps directory itself, trusts
+      # it, and reports the derived tap name (`elide-dev/homebrew-elide` →
+      # `elide-dev/elide`) as an output.
+      - name: "Setup: Homebrew"
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@8f3d1ec8a696b3b9d9a6c3696b6c73033cab69e4 # 2026.08.14.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Setup: Cache RubyGems"
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: lint-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: lint-rubygems-
+      - name: "Setup: Tap Name"
+        run: echo "TAP=${{ steps.set-up-homebrew.outputs.tap-name }}" >>"$GITHUB_ENV"
+      - name: "Check: brew style"
+        run: brew style "$TAP"
+      # `--online` fetches the homepage and every platform URL, so this is what
+      # catches a bumped formula pointing at assets that were never uploaded.
+      # The cellar checks inside `audit` are no-ops here (nothing is installed);
+      # the install job below runs the same audit against a real keg.
+      - name: "Check: brew audit"
+        run: brew audit --tap="$TAP" --online
+      # Guards the `livecheck` block's regex, which has to cope with the
+      # `<semver>+<datestamp>` tags the nightly channel publishes. A regex that
+      # stops matching exits non-zero here ("Unable to get versions") instead of
+      # silently making the formula un-bumpable.
+      - name: "Check: brew livecheck"
+        run: brew livecheck --formula --verbose "$TAP/elide"
+
+  install:
+    name: "Install (${{ matrix.label }})"
+    needs: [lint]
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # One runner per published archive. There is deliberately no
+          # macos-amd64 leg: that archive is not built upstream, which is why
+          # the formula carries `depends_on arch: :arm64` on macOS. Linux arm64
+          # is a Tier 1 Homebrew platform as of Homebrew 5.0.0.
+          - label: macos-arm64
+            runner: macos-26
+          - label: linux-amd64
+            runner: ubuntu-latest
+          - label: linux-arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - name: "Setup: Homebrew"
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@8f3d1ec8a696b3b9d9a6c3696b6c73033cab69e4 # 2026.08.14.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Setup: Cache RubyGems"
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: ${{ matrix.label }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ matrix.label }}-rubygems-
+      - name: "Setup: Tap Name"
+        run: echo "TAP=${{ steps.set-up-homebrew.outputs.tap-name }}" >>"$GITHUB_ENV"
+      # A real install: no bottles exist for this tap, so brew fetches the
+      # platform archive, verifies its sha256 and runs the formula's `install`.
+      # This is the check that catches a nightly whose archive layout moved.
+      - name: "Install: elide"
+        run: brew install --formula --verbose "$TAP/elide"
+      # No `--formula` here: unlike install/audit/style, `brew test` rejects it
+      # ("Error: invalid option: --formula").
+      - name: "Test: brew test"
+        run: brew test --verbose "$TAP/elide"
+      # Same audit as the lint job, but now against an installed keg, so the
+      # cellar checks (binary architectures, stray man pages, shim references)
+      # actually run.
+      - name: "Check: brew audit (installed)"
+        run: brew audit --formula --online "$TAP/elide"
+      - name: "Smoke: elide --version"
+        run: |
+          command -v elide
+          elide --version

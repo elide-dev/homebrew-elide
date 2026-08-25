@@ -1,0 +1,5 @@
+{
+  "elide": [
+    "libexec/lib/maven/lib/jline-native/*/*/*"
+  ]
+}
