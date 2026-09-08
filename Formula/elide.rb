@@ -1,7 +1,7 @@
 class Elide < Formula
   desc "Fast runtime, compiler and toolchain for JVM, JavaScript and Python"
   homepage "https://elide.dev"
-  version "1.5.1+20260903"
+  version "1.5.2+20260908"
   license :cannot_represent
 
   livecheck do
@@ -18,18 +18,18 @@ class Elide < Formula
 
     on_arm do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.macos-arm64.txz"
-      sha256 "5d6cc8c502009835f39c3d3c446a26f3def266885003152d84ae445bc20810cf"
+      sha256 "588177d0c50c0b0972f6aaf34441447cdd0ff8c1527f898b479b9bc57ea66190"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.linux-arm64.txz"
-      sha256 "d3e6692f9d69a823480c2e5e03377d905e4f202152c30910c14726f759b085c3"
+      sha256 "679c2c95188a757a0b44542b18c6a7e44e6a56735d71e20d468572ffd2a8f76d"
     end
     on_intel do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.linux-amd64.txz"
-      sha256 "58d96e854097cfb6ece5dcf189184f7f6c13944c80870be0cb7c08afa71c84c4"
+      sha256 "3eb502bf4ef3053d49772fafab47072ad9d06e871aab7e9e24331f0dc7a9bef2"
     end
   end
 
