@@ -34,7 +34,7 @@ jobs:
       # `elide-dev/elide`) as an output.
       - name: "Setup: Homebrew"
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@8f3d1ec8a696b3b9d9a6c3696b6c73033cab69e4 # 2026.08.14.1
+        uses: Homebrew/actions/setup-homebrew@f8d4222eb633e65c2a0157383cf80861fc7fae7f # 2026.09.07.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Setup: Cache RubyGems"
@@ -83,7 +83,7 @@ jobs:
     steps:
       - name: "Setup: Homebrew"
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@8f3d1ec8a696b3b9d9a6c3696b6c73033cab69e4 # 2026.08.14.1
+        uses: Homebrew/actions/setup-homebrew@f8d4222eb633e65c2a0157383cf80861fc7fae7f # 2026.09.07.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Setup: Cache RubyGems"
