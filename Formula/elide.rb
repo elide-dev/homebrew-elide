@@ -1,7 +1,7 @@
 class Elide < Formula
   desc "Fast runtime, compiler and toolchain for JVM, JavaScript and Python"
   homepage "https://elide.dev"
-  version "1.6.4+20261121"
+  version "1.6.4+20261123"
   license :cannot_represent
 
   livecheck do
@@ -18,10 +18,10 @@ class Elide < Formula
 
     on_arm do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.macos-arm64.txz"
-      sha256 "d7c9605d4233c48ff3b305fa95203f089ee3f65e5e09b1525326aba142e8de21"
+      sha256 "f6f560b3cf63e42f860501bba2623cb6d2fc34e57937e0618e6470840e111d12"
       resource "python" do
-        url "https://github.com/elide-dev/elide/releases/download/1.6.4+20261121/elide.python.macos-arm64.txz"
-        sha256 "0795c9f5b10a7cd3db9c7723631a4073d1b3c1aaf10ea5fadcb4022ed8903d5a"
+        url "https://github.com/elide-dev/elide/releases/download/1.6.4+20261123/elide.python.macos-arm64.txz"
+        sha256 "696acfa0b82b362274c312a09ef56bed0742d53ee971701327d8540db93f5b96"
       end
     end
   end
@@ -29,18 +29,18 @@ class Elide < Formula
   on_linux do
     on_arm do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.linux-arm64.txz"
-      sha256 "26bca5360b53a5812a02d7eef9152897ba85265aff16d7869b9a34a7c66e0135"
+      sha256 "2f5799552ddf42bb65b56b2ec483d69a08a72f51e864f5551e5fa797a8377113"
       resource "python" do
-        url "https://github.com/elide-dev/elide/releases/download/1.6.4+20261121/elide.python.linux-arm64.txz"
-        sha256 "6b201c35964e07895958822ac97babab00d9df66d65fd78927ab030b161d9bed"
+        url "https://github.com/elide-dev/elide/releases/download/1.6.4+20261123/elide.python.linux-arm64.txz"
+        sha256 "9fa97fecf31800b176d4423ae91fead19f69c437c75b160964f191319eeacd48"
       end
     end
     on_intel do
       url "https://github.com/elide-dev/elide/releases/download/#{version}/elide.linux-amd64.txz"
-      sha256 "eed659ac47c8bfb92ff0b5288af065409aae3a0330b346da91d1634f56152520"
+      sha256 "a274ed3f233a42809f71f1f98b34e2cf93320f1f024bcbf0b8f49f9912c20cb1"
       resource "python" do
-        url "https://github.com/elide-dev/elide/releases/download/1.6.4+20261121/elide.python.linux-amd64.txz"
-        sha256 "29108d66ac5cf81ef926daccb31747de9b2d4dd1609f4fa0e94350d540af671a"
+        url "https://github.com/elide-dev/elide/releases/download/1.6.4+20261123/elide.python.linux-amd64.txz"
+        sha256 "81ad314b4400b653a5895c38813bfc167db686960c491622e17a7ad3bf222183"
       end
     end
   end
